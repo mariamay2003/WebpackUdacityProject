@@ -13,4 +13,4 @@ This project uses the Udacity-hosted AWS NLP API to analyze news articles or blo
 
 ### 1. Clone the Repository:
 ```bash
-git clone <repository_url>
+git clone https://github.com/mariamay2003/WebpackUdacityProject.git
