@@ -24,16 +24,13 @@ async function scrapeTextFromURL(url) {
         const $ = cheerio.load(data);
         const text = $('body').text().trim();
 
-        // Check if text content exists
         if (!text) {
             console.error('No text content found at the provided URL');
             return null;
         }
 
         // Extract and return the first 200 characters of the text
-        const trimmedText = text.slice(0, 200);
-        console.log(`Extracted Text (200 characters):\n${trimmedText}\n--- End of Text Preview ---`);
-        return trimmedText;
+        return text.slice(0, 200);
     } catch (error) {
         console.error('Error while scraping text from the URL:', error.message);
         throw new Error('Failed to scrape text from the URL');
@@ -44,36 +41,38 @@ async function scrapeTextFromURL(url) {
 app.post('/analyze-url', async (req, res) => {
     const { url } = req.body;
 
-    // Validate the input URL
     if (!url) {
-        console.error('No URL provided in the request body');
         return res.status(400).json({ error: 'URL is required' });
     }
 
     try {
-        // Step 1: Scrape text from the provided URL
+        // Scrape text from the provided URL
         const text = await scrapeTextFromURL(url);
-
         if (!text) {
             return res.status(400).json({ error: 'No text content found at the provided URL' });
         }
 
-        // Step 2: Connect to the AWS NLP API
-        // --- Learner Task: Add the code to send the extracted text to the AWS NLP API below ---
-        // Use `axios.post` to send a POST request to the API.
-        // The endpoint URL is: https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer
-        // Send the `text` as part of the request body.
+        // Call the Udacity NLP API
+        const nlpResponse = await axios.post('https://api.meaningcloud.com/sentiment-2.1', {
+            key: 'YOUR_API_KEY',
+            lang: 'en',
+            txt: text,
+        });
 
-        /*
-        Example Code:
-        const response = await axios.post('https://kooye7u703.execute-api.us-east-1.amazonaws.com/NLPAnalyzer', { text });
-        return res.json(response.data); // Send the NLP results back to the client
-        */
+        // Extract necessary data from the API response
+        const { score_tag, agreement, subjectivity, confidence, irony } = nlpResponse.data;
 
-        // Placeholder response for learners to complete
-        return res.json({ message: 'NLP analysis result will be here. Complete the API call above!' });
+        // Send the results back to the client
+        return res.json({
+            sentiment: score_tag,
+            agreement,
+            subjectivity,
+            confidence,
+            irony,
+            textPreview: text,
+        });
     } catch (error) {
-        console.error('Error during URL processing or API request:', error.message);
+        console.error('Error during API request:', error.message);
         return res.status(500).json({ error: 'Failed to analyze the URL' });
     }
 });
@@ -84,6 +83,7 @@ app.get('/', (req, res) => {
 });
 
 // Start the server
-app.listen(8000, () => {
-    console.log('Server running on port 8000');
+const PORT = 8000;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });

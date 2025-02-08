@@ -1,0 +1,30 @@
+/* Global base styles */
+body {
+    background-color: #e9f0f7;
+    color: #333;
+    font-size: 16px;
+    margin-bottom: 50px;
+
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+    font-family: 'Arial', sans-serif;
+    font-weight: 600;
+    color: #333;
+}
+
+p {
+    margin-bottom: 15px;
+    color: #555;
+    font-size: 1rem;
+}
+
+ul,
+ol {
+    margin-left: 20px;
+}

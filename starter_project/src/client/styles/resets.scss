@@ -1,0 +1,35 @@
+/* Reset default margins and paddings */
+*,
+*::before,
+*::after {
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+body {
+	font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+	line-height: 1.5;
+	color: #333;
+	background-color: #f7f7f7;
+}
+
+a {
+	text-decoration: none;
+	color: inherit;
+}
+
+button {
+	background: none;
+	border: none;
+	cursor: pointer;
+	background-color: #333;
+	padding: 10px;
+	border-radius: 10px;
+	color: #f7f7f7;
+}
+
+button:hover {
+	background-color: #898686;
+	color: #333;
+}
